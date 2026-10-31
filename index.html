@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Service Desk TI | Escola da Nuvem - Case 2</title>
+  <style>
+    :root {
+      --aws-dark: #232F3E;
+      --aws-orange: #FF9900;
+      --aws-light: #F2F3F3;
+      --text-main: #16191F;
+      --text-muted: #545B64;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--aws-light);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: var(--aws-dark);
+      color: #FFFFFF;
+      padding: 18px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .brand {
+      font-size: 1.25rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand span {
+      color: var(--aws-orange);
+    }
+
+    .badge {
+      background-color: rgba(255, 153, 0, 0.15);
+      color: var(--aws-orange);
+      border: 1px solid var(--aws-orange);
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    main {
+      flex: 1;
+      max-width: 960px;
+      margin: 40px auto;
+      padding: 0 20px;
+      width: 100%;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+      margin-bottom: 8px;
+      color: var(--aws-dark);
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    .card {
+      background: #FFFFFF;
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      border-top: 4px solid var(--aws-orange);
+      transition: transform 0.15s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+    }
+
+    .card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 8px;
+      color: var(--aws-dark);
+    }
+
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .info-box {
+      background-color: #FFFFFF;
+      border: 1px solid #D5DBDB;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .info-box strong {
+      color: var(--aws-dark);
+    }
+
+    footer {
+      background-color: #FFFFFF;
+      border-top: 1px solid #E9EBED;
+      text-align: center;
+      padding: 16px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      Escola da Nuvem <span>|</span> Service Desk TI
+    </div>
+    <div class="badge">Case 2 • Equipe 02</div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Central de Atendimento ao Colaborador</h1>
+      <p>Suporte ágil e automatizado via IA Conversacional e Amazon Connect.</p>
+    </section>
+
+    <section class="cards-grid">
+      <div class="card">
+        <h3>🔑 Acesso e Senhas</h3>
+        <p>Esqueceu ou bloqueou sua senha de rede corporativa? Solicite o reset seguro via chat.</p>
+      </div>
+
+      <div class="card">
+        <h3>🌐 Conectividade e Redes</h3>
+        <p>Dificuldades de acesso à VPN, lentidão ou queda de internet? Abra um chamado técnico direto.</p>
+      </div>
+
+      <div class="card">
+        <h3>💻 Solicitação de Hardware</h3>
+        <p>Precisa de notebook, periféricos ou troca de máquina? Geração automática de ticket no Connect Cases.</p>
+      </div>
+    </section>
+
+    <section class="info-box">
+      <p>💬 <strong>Precisa de ajuda imediata?</strong> Clique no ícone de chat no canto inferior direito para falar com nosso assistente virtual integrado ao <strong>Amazon Lex V2</strong>.</p>
+    </section>
+  </main>
+
+  <footer>
+    Trilha de Extensão Amazon Connect — Escola da Nuvem &copy; 2026
+  </footer>
+
+  <!-- ======================================================== -->
+  <!-- COLE AQUI O SCRIPT DO WIDGET GERADO NO PASSO 3 DO CONNECT -->
+  <!-- ======================================================== -->
+  <script type="text/javascript">
+    (function(w, d, x, id){
+      s=d.createElement('script');
+      s.src='https://edn-grupo02-servicedesk.my.connect.aws/connectwidget/static/amazon-connect-chat-interface-client.js';
+      s.async=1;
+      s.id=id;
+      d.getElementsByTagName('head')[0].appendChild(s);
+      w[x] =  w[x] || function() { (w[x].ac = w[x].ac || []).push(arguments) };
+    })(window, document, 'amazon_connect', '32f29334-3781-4ea6-a203-f2663d24f30a');
+    amazon_connect('styles', { iconType: 'CHAT', openChat: { color: '#ffffff', backgroundColor: '#FF9900' }, closeChat: { color: '#ffffff', backgroundColor: '#232F3E'} });
+    amazon_connect('snippetId', 'QVFJREFIaFlwRXZ2YWpja2ltNitTc3ROR25DOU9UTlZvemEzcUJScWtob2VUczNqK2dGOXNzRUtKelpkOThWTDgvNGdUK01WQUFBQWJqQnNCZ2txaGtpRzl3MEJCd2FnWHpCZEFnRUFNRmdHQ1NxR1NJYjNEUUVIQVRBZUJnbGdoa2dCWlFNRUFTNHdFUVFNSmVkbVgzVkI0VFh2QVU5ekFnRVFnQ3RZMjJndDQwQlREWnI1ZDRaN2ZuV2tGU3RETGgvaWd0MkJkVG5xdnY0MG5xN0Q5SmhGYVZSTkFoOUw6OndxMHRjWUlMOGpzOU9KMEF3eCswUmV0REhxWGFlcW5IWlc3b0lpMnlSN3kyT2dDYXZVZ1A0dU13MzRGaysrM3Z3VEFlOFk1RW9veTZneFdrMnNlaVNES3BZcFMzQjFnQnVVRFBxTEhQTlZJMTJPOFAxUWhNTzZyU0tvdkdINmdmanJaRzJoZWJsdzVRckwrUXhwTnR3Umk0TzBDZnk4UT0=');
+    amazon_connect('supportedMessagingContentTypes', [ 'text/plain', 'text/markdown', 'application/vnd.amazonaws.connect.message.interactive', 'application/vnd.amazonaws.connect.message.interactive.response' ]);
+  </script>
+
+</body>
+</html>
