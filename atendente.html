@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Service Desk TI - Painel do Atendente (CCP)</title>
 
-  <!-- Biblioteca oficial Amazon Connect Streams -->
-  <script src="https://amazon-connect.github.io/amazon-connect-streams/amazon-connect-1.7.js"></script>
+  <!-- Biblioteca oficial Amazon Connect Streams atualizada (v2) -->
+  <script src="https://amazon-connect.github.io/amazon-connect-streams/amazon-connect-streams.js"></script>
 
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -92,6 +92,14 @@
       height: 100vh;
       border-left: 1px solid #334155;
       background-color: #ffffff;
+      position: relative;
+    }
+
+    /* Garante que o iframe gerado ocupe o espaço */
+    #ccp-container iframe {
+      width: 100% !important;
+      height: 100% !important;
+      border: none !important;
     }
   </style>
 </head>
@@ -120,60 +128,65 @@
   <div id="ccp-container"></div>
 
   <script>
-    const ccpUrl = "https://edn-grupo02-servicedesk.my.connect.aws/ccp-v2";
+    const containerDiv = document.getElementById("ccp-container");
+    const instanceUrl = "https://edn-grupo02-servicedesk.my.connect.aws";
+    const ccpUrl = `${instanceUrl}/ccp-v2/`;
 
-    connect.core.initCCP(document.getElementById("ccp-container"), {
-      ccpUrl: ccpUrl,
-      loginPopup: true,
-      loginPopupAutoClose: true,
-      showExternalProviderLogin: false,
-      softphone: {
-        allowFramedSoftphone: true
-      }
-    });
-
-    // Monitoramento do status do Agente
-    connect.agent(function(agent) {
-      const badge = document.getElementById("agent-status");
-      badge.textContent = "Disponível / Conectado";
-      badge.className = "status-badge online";
-
-      agent.onStateChange(function(agentStateChange) {
-        badge.textContent = "Status: " + agentStateChange.newState;
-      });
-    });
-
-    // Monitoramento dos contatos recebidos (Voz / Chat)
-    connect.contact(function(contact) {
-      const details = document.getElementById("contact-details");
-      const badge = document.getElementById("agent-status");
-
-      contact.onConnecting(function() {
-        badge.textContent = "Recebendo Contato...";
-        badge.className = "status-badge connected";
-        details.innerHTML = "<strong>Novo contato entrando...</strong> Canal: " + contact.getType();
-      });
-
-      contact.onConnected(function() {
-        badge.textContent = "Em Atendimento";
-        badge.className = "status-badge connected";
-        
-        let attributes = contact.getAttributes();
-        let attrHtml = "<p><strong>Contato Conectado!</strong></p>";
-        if (attributes && Object.keys(attributes).length > 0) {
-          attrHtml += "<ul>";
-          for (let key in attributes) {
-            attrHtml += `<li><strong>${key}:</strong> ${attributes[key].value}</li>`;
-          }
-          attrHtml += "</ul>";
+    window.addEventListener("load", function () {
+      connect.core.initCCP(containerDiv, {
+        ccpUrl: ccpUrl,
+        loginUrl: `${instanceUrl}/login`,
+        loginPopup: true,
+        loginPopupAutoClose: true,
+        showExternalProviderLogin: false,
+        softphone: {
+          allowFramedSoftphone: true
         }
-        details.innerHTML = attrHtml;
       });
 
-      contact.onEnded(function() {
-        badge.textContent = "Disponível";
+      // Monitoramento do status do Agente
+      connect.agent(function(agent) {
+        const badge = document.getElementById("agent-status");
+        badge.textContent = "Disponível / Conectado";
         badge.className = "status-badge online";
-        details.innerHTML = "Atendimento finalizado. Aguardando novo contato...";
+
+        agent.onStateChange(function(agentStateChange) {
+          badge.textContent = "Status: " + agentStateChange.newState;
+        });
+      });
+
+      // Monitoramento dos contatos recebidos (Voz / Chat)
+      connect.contact(function(contact) {
+        const details = document.getElementById("contact-details");
+        const badge = document.getElementById("agent-status");
+
+        contact.onConnecting(function() {
+          badge.textContent = "Recebendo Contato...";
+          badge.className = "status-badge connected";
+          details.innerHTML = "<strong>Novo contato entrando...</strong> Canal: " + contact.getType();
+        });
+
+        contact.onConnected(function() {
+          badge.textContent = "Em Atendimento";
+          badge.className = "status-badge connected";
+          
+          let attributes = contact.getAttributes();
+          let attrHtml = "<p><strong>Contato Conectado!</strong></p>";
+          if (attributes && Object.keys(attributes).length > 0) {
+            attrHtml += "<ul>";
+            for (let key in attributes) {
+              attrHtml += `<li><strong>${key}:</strong> ${attributes[key].value}</li>`;
+            }
+            attrHtml += "</ul>";
+          }
+          details.innerHTML = attrHtml;
+        });
+
+        contact.onEnded(function() {
+          badge.textContent = "Disponível";
+          badge.className = "status-badge online";
+          details.innerHTML = "Atendimento finalizado. Aguardando novo contato...";
+        });
       });
     });
   </script>
