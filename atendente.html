@@ -61,11 +61,17 @@
       font-weight: 600;
       background-color: #334155;
       color: #94a3b8;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
 
     .status-badge.online {
       background-color: #166534;
       color: #4ade80;
+    }
+
+    .status-badge.offline {
+      background-color: #991b1b;
+      color: #f87171;
     }
 
     .status-badge.connected {
@@ -147,11 +153,29 @@
       // Monitoramento do status do Agente
       connect.agent(function(agent) {
         const badge = document.getElementById("agent-status");
-        badge.textContent = "Disponível / Conectado";
-        badge.className = "status-badge online";
 
+        function updateStatus(stateName) {
+          badge.textContent = "Status: " + stateName;
+          
+          const stateLower = (stateName || "").toLowerCase();
+          if (stateLower.includes("offline")) {
+            badge.className = "status-badge offline";
+          } else if (stateLower.includes("available") || stateLower.includes("disponível")) {
+            badge.className = "status-badge online";
+          } else {
+            badge.className = "status-badge";
+          }
+        }
+
+        // Estado inicial do agente
+        const currentState = agent.getState();
+        if (currentState && currentState.name) {
+          updateStatus(currentState.name);
+        }
+
+        // Atualização em tempo real quando mudar o dropdown do CCP
         agent.onStateChange(function(agentStateChange) {
-          badge.textContent = "Status: " + agentStateChange.newState;
+          updateStatus(agentStateChange.newState);
         });
       });
 
@@ -182,13 +206,4 @@
           details.innerHTML = attrHtml;
         });
 
-        contact.onEnded(function() {
-          badge.textContent = "Disponível";
-          badge.className = "status-badge online";
-          details.innerHTML = "Atendimento finalizado. Aguardando novo contato...";
-        });
-      });
-    });
-  </script>
-</body>
-</html>
+        contact.onEnded(
