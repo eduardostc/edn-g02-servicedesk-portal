@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Service Desk TI - Painel do Atendente (CCP)</title>
+
+  <!-- Biblioteca oficial Amazon Connect Streams -->
+  <script src="https://amazon-connect.github.io/amazon-connect-streams/amazon-connect-1.7.js"></script>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      height: 100vh;
+      background-color: #0f172a;
+      color: #f8fafc;
+      overflow: hidden;
+    }
+
+    /* Painel do Operador / Contexto */
+    #dashboard {
+      flex: 1;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .header h1 {
+      font-size: 1.8rem;
+      color: #38bdf8;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      color: #94a3b8;
+      font-size: 0.95rem;
+    }
+
+    .card {
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 24px;
+      margin-top: 20px;
+    }
+
+    .card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      color: #f1f5f9;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      background-color: #334155;
+      color: #94a3b8;
+    }
+
+    .status-badge.online {
+      background-color: #166534;
+      color: #4ade80;
+    }
+
+    .status-badge.connected {
+      background-color: #1e40af;
+      color: #60a5fa;
+    }
+
+    #contact-details {
+      margin-top: 16px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+
+    .footer {
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+
+    /* Container do CCP Embutido */
+    #ccp-container {
+      width: 400px;
+      min-width: 400px;
+      height: 100vh;
+      border-left: 1px solid #334155;
+      background-color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="dashboard">
+    <div class="header">
+      <h1>Service Desk TI — Central de Operações</h1>
+      <p>Equipe 02 • Trilha de Extensão Amazon Connect & Lex V2</p>
+    </div>
+
+    <div class="card">
+      <h3>Estado do Atendimento</h3>
+      <span id="agent-status" class="status-badge">Inicializando CCP...</span>
+      <div id="contact-details">
+        Aguardando nova interação... Fique disponível no painel ao lado para receber chamadas de voz ou mensagens do chat.
+      </div>
+    </div>
+
+    <div class="footer">
+      Escola da Nuvem &copy; 2026 — Instância: edn-grupo02-servicedesk
+    </div>
+  </div>
+
+  <!-- O CCP do Amazon Connect é renderizado dentro desta div -->
+  <div id="ccp-container"></div>
+
+  <script>
+    const ccpUrl = "https://edn-grupo02-servicedesk.my.connect.aws/connect/ccp-v2/";
+
+    connect.core.initCCP(document.getElementById("ccp-container"), {
+      ccpUrl: ccpUrl,
+      loginPopup: true,
+      loginPopupAutoClose: true,
+      showExternalProviderLogin: false,
+      softphone: {
+        allowFramedSoftphone: true
+      }
+    });
+
+    // Monitoramento do status do Agente
+    connect.agent(function(agent) {
+      const badge = document.getElementById("agent-status");
+      badge.textContent = "Disponível / Conectado";
+      badge.className = "status-badge online";
+
+      agent.onStateChange(function(agentStateChange) {
+        badge.textContent = "Status: " + agentStateChange.newState;
+      });
+    });
+
+    // Monitoramento dos contatos recebidos (Voz / Chat)
+    connect.contact(function(contact) {
+      const details = document.getElementById("contact-details");
+      const badge = document.getElementById("agent-status");
+
+      contact.onConnecting(function() {
+        badge.textContent = "Recebendo Contato...";
+        badge.className = "status-badge connected";
+        details.innerHTML = "<strong>Novo contato entrando...</strong> Canal: " + contact.getType();
+      });
+
+      contact.onConnected(function() {
+        badge.textContent = "Em Atendimento";
+        badge.className = "status-badge connected";
+        
+        let attributes = contact.getAttributes();
+        let attrHtml = "<p><strong>Contato Conectado!</strong></p>";
+        if (attributes && Object.keys(attributes).length > 0) {
+          attrHtml += "<ul>";
+          for (let key in attributes) {
+            attrHtml += `<li><strong>${key}:</strong> ${attributes[key].value}</li>`;
+          }
+          attrHtml += "</ul>";
+        }
+        details.innerHTML = attrHtml;
+      });
+
+      contact.onEnded(function() {
+        badge.textContent = "Disponível";
+        badge.className = "status-badge online";
+        details.innerHTML = "Atendimento finalizado. Aguardando novo contato...";
+      });
+    });
+  </script>
+</body>
+</html>
