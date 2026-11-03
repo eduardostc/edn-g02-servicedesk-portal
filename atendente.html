@@ -206,4 +206,14 @@
           details.innerHTML = attrHtml;
         });
 
-        contact.onEnded(
+        contact.onEnded(function() {
+          badge.textContent = "Disponível";
+          badge.className = "status-badge online";
+          details.innerHTML = "Atendimento finalizado. Aguardando novo contato...";
+        });
+      });
+    });
+  </script>
+</body>
+</html>
+
