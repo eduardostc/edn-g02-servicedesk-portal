@@ -182,7 +182,7 @@
   <!-- ======================================================== -->
   <!-- COLE AQUI O SCRIPT DO WIDGET GERADO NO PASSO 3 DO CONNECT -->
   <!-- ======================================================== -->
-  <script type="text/javascript">
+  <!-- <script type="text/javascript">
     (function(w, d, x, id){
       s=d.createElement('script');
       s.src='https://edn-grupo02-servicedesk.my.connect.aws/connectwidget/static/amazon-connect-chat-interface-client.js';
@@ -194,6 +194,34 @@
     amazon_connect('styles', { iconType: 'CHAT', openChat: { color: '#ffffff', backgroundColor: '#FF9900' }, closeChat: { color: '#ffffff', backgroundColor: '#232F3E'} });
     amazon_connect('snippetId', 'QVFJREFIaFlwRXZ2YWpja2ltNitTc3ROR25DOU9UTlZvemEzcUJScWtob2VUczNqK2dGOXNzRUtKelpkOThWTDgvNGdUK01WQUFBQWJqQnNCZ2txaGtpRzl3MEJCd2FnWHpCZEFnRUFNRmdHQ1NxR1NJYjNEUUVIQVRBZUJnbGdoa2dCWlFNRUFTNHdFUVFNSmVkbVgzVkI0VFh2QVU5ekFnRVFnQ3RZMjJndDQwQlREWnI1ZDRaN2ZuV2tGU3RETGgvaWd0MkJkVG5xdnY0MG5xN0Q5SmhGYVZSTkFoOUw6OndxMHRjWUlMOGpzOU9KMEF3eCswUmV0REhxWGFlcW5IWlc3b0lpMnlSN3kyT2dDYXZVZ1A0dU13MzRGaysrM3Z3VEFlOFk1RW9veTZneFdrMnNlaVNES3BZcFMzQjFnQnVVRFBxTEhQTlZJMTJPOFAxUWhNTzZyU0tvdkdINmdmanJaRzJoZWJsdzVRckwrUXhwTnR3Umk0TzBDZnk4UT0=');
     amazon_connect('supportedMessagingContentTypes', [ 'text/plain', 'text/markdown', 'application/vnd.amazonaws.connect.message.interactive', 'application/vnd.amazonaws.connect.message.interactive.response' ]);
+  </script> -->
+  <script type="text/javascript">
+    (function(w, d, x, id){
+      s=d.createElement('script');
+      s.src='https://edn-grupo02-servicedesk.my.connect.aws/connectwidget/static/amazon-connect-chat-interface-client.js';
+      s.async=1;
+      s.id=id;
+      d.getElementsByTagName('head')[0].appendChild(s);
+      w[x] =  w[x] || function() { (w[x].ac = w[x].ac || []).push(arguments) };
+    })(window, document, 'amazon_connect', '32f29334-3781-4ea6-a203-f2663d24f30a');
+    
+    amazon_connect('styles', { 
+      iconType: 'CHAT', 
+      openChat: { color: '#ffffff', backgroundColor: '#FF9900' }, 
+      closeChat: { color: '#ffffff', backgroundColor: '#232F3E'} 
+    });
+    
+    amazon_connect('snippetId', 'QVFJREFIaFlwRXZ2YWpja2ltNitTc3ROR25DOU9UTlZvemEzcUJScWtob2VUczNqK2dGOXNzRUtKelpkOThWTDgvNGdUK01WQUFBQWJqQnNCZ2txaGtpRzl3MEJCd2FnWHpCZEFnRUFNRmdHQ1NxR1NJYjNEUUVIQVRBZUJnbGdoa2dCWlFNRUFTNHdFUVFNSmVkbVgzVkI0VFh2QVU5ekFnRVFnQ3RZMjJndDQwQlREWnI1ZDRaN2ZuV2tGU3RETGgvaWd0MkJkVG5xdnY0MG5xN0Q5SmhGYVZSTkFoOUw6OndxMHRjWUlMOGpzOU9KMEF3eCswUmV0REhxWGFlcW5IWlc3b0lpMnlSN3kyT2dDYXZVZ1A0dU13MzRGaysrM3Z3VEFlOFk1RW9veTZneFdrMnNlaVNES3BZcFMzQjFnQnVVRFBxTEhQTlZJMTJPOFAxUWhNTzZyU0tvdkdINmdmanJaRzJoZWJsdzVRckwrUXhwTnR3Umk0TzBDZnk4UT0=');
+    
+    amazon_connect('supportedMessagingContentTypes', [ 
+      'text/plain', 
+      'text/markdown', 
+      'application/vnd.amazonaws.connect.message.interactive', 
+      'application/vnd.amazonaws.connect.message.interactive.response' 
+    ]);
+  
+    // Define o nome inicial enviado à sessão do Connect
+    amazon_connect('customerName', 'Carlos Eduardo');
   </script>
 
 </body>
