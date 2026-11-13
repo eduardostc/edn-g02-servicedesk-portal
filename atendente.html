@@ -264,7 +264,8 @@
           const cpf = getAttr(["CpfColaborador", "CPF", "cpf"]);
           const profileId = getAttr(["ProfileId", "CustomerProfileId", "profileId"]);
           const caseId = getAttr(["CaseId", "caseId", "CaseNumber"]);
-          const assunto = getAttr(["MotivoChamado", "Intent", "Categoria", "Assunto"]);
+          const tituloChamado = getAttr(["TituloChamado", "Title", "CaseTitle"]);
+          const assunto = getAttr(["Intent", "MotivoChamado", "Categoria", "Assunto"]);
           const fila = contact.getQueue() ? contact.getQueue().name : "Service Desk N1";
 
           profileDiv.innerHTML = `
@@ -277,7 +278,14 @@
 
           // Lista quaisquer outros atributos personalizados enviados pelo fluxo
           let extrasHtml = "";
-          const ignorar = ["CustomerName", "nomeColaborador", "Name", "CpfColaborador", "CPF", "cpf", "ProfileId", "CustomerProfileId", "profileId", "CaseId", "caseId", "CaseNumber"];
+          const ignorar = [
+            "CustomerName", "nomeColaborador", "Name",
+            "CpfColaborador", "CPF", "cpf",
+            "ProfileId", "CustomerProfileId", "profileId",
+            "CaseId", "caseId", "CaseNumber",
+            "TituloChamado", "Title", "CaseTitle",
+            "Intent", "MotivoChamado", "Categoria", "Assunto"
+          ];
           for (const key in attrs) {
             if (!ignorar.includes(key) && attrs[key] && attrs[key].value) {
               extrasHtml += `<div class="info-item"><span>${key}</span><strong>${attrs[key].value}</strong></div>`;
@@ -286,9 +294,10 @@
 
           caseDiv.innerHTML = `
             <div class="info-grid">
+              <div class="info-item"><span>Título do Chamado</span><strong>${tituloChamado}</strong></div>
               <div class="info-item"><span>Protocolo / Case ID</span><strong>${caseId}</strong></div>
-              <div class="info-item"><span>Fila de Atendimento</span><strong>${fila}</strong></div>
               <div class="info-item"><span>Solicitação / Intenção</span><strong>${assunto}</strong></div>
+              <div class="info-item"><span>Fila de Atendimento</span><strong>${fila}</strong></div>
               ${extrasHtml}
             </div>
           `;
