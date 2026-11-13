@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Service Desk TI - Painel do Atendente (CCP)</title>
+  <title>Service Desk TI - Agent Workspace (Cases & Profiles)</title>
 
-  <!-- Biblioteca oficial Amazon Connect Streams atualizada (v2) -->  
-  <script src="https://cdn.jsdelivr.net/npm/amazon-connect-streams@2.14.0/release/connect-streams-min.js"></script>
+  <!-- Biblioteca oficial Amazon Connect Streams -->
+  <script src="https://cdn.jsdelivr.net/npm/amazon-connect-streams@2.15.0/release/connect-streams-min.js"></script>
 
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -19,38 +19,51 @@
       overflow: hidden;
     }
 
-    /* Painel do Operador / Contexto */
+    /* Painel Lateral de Contexto (Customer Profile & Case) */
     #dashboard {
-      flex: 1;
-      padding: 40px;
+      width: 380px;
+      min-width: 340px;
+      padding: 28px 24px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      border-right: 1px solid #334155;
+      overflow-y: auto;
     }
 
     .header h1 {
-      font-size: 1.8rem;
+      font-size: 1.45rem;
       color: #38bdf8;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .header p {
       color: #94a3b8;
-      font-size: 0.95rem;
+      font-size: 0.85rem;
     }
 
     .card {
       background-color: #1e293b;
       border: 1px solid #334155;
-      border-radius: 12px;
-      padding: 24px;
-      margin-top: 20px;
+      border-radius: 10px;
+      padding: 18px;
+      margin-top: 16px;
     }
 
     .card h3 {
-      font-size: 1.1rem;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
       margin-bottom: 12px;
-      color: #f1f5f9;
+      color: #94a3b8;
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
     .status-badge {
@@ -60,48 +73,70 @@
       font-size: 0.85rem;
       font-weight: 600;
       background-color: #334155;
-      color: #94a3b8;
-      transition: background-color 0.2s ease, color 0.2s ease;
-    }
-
-    .status-badge.online {
-      background-color: #166534;
-      color: #4ade80;
-    }
-
-    .status-badge.offline {
-      background-color: #991b1b;
-      color: #f87171;
-    }
-
-    .status-badge.connected {
-      background-color: #1e40af;
-      color: #60a5fa;
-    }
-
-    #contact-details {
-      margin-top: 16px;
-      font-size: 0.95rem;
-      line-height: 1.6;
       color: #cbd5e1;
     }
 
-    .footer {
+    .status-badge.online { background-color: #166534; color: #4ade80; }
+    .status-badge.offline { background-color: #991b1b; color: #f87171; }
+    .status-badge.connected { background-color: #1e40af; color: #60a5fa; }
+
+    .btn-login {
+      background-color: #ff9900;
+      color: #0f172a;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
       font-size: 0.8rem;
-      color: #64748b;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-login:hover { background-color: #e68a00; }
+
+    .info-grid {
+      display: grid;
+      gap: 10px;
+      font-size: 0.9rem;
     }
 
-    /* Container do CCP Embutido */
+    .info-item {
+      background-color: #0f172a;
+      padding: 10px 12px;
+      border-radius: 6px;
+      border: 1px solid #334155;
+    }
+
+    .info-item span {
+      display: block;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-bottom: 2px;
+    }
+
+    .info-item strong {
+      color: #f1f5f9;
+      word-break: break-word;
+    }
+
+    .empty-msg {
+      color: #64748b;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .footer {
+      font-size: 0.78rem;
+      color: #64748b;
+      margin-top: 20px;
+    }
+
+    /* Container Principal do Agent Workspace (CCP + Customer Profiles + Cases) */
     #ccp-container {
-      width: 400px;
-      min-width: 400px;
+      flex: 1;
       height: 100vh;
-      border-left: 1px solid #334155;
       background-color: #ffffff;
       position: relative;
     }
 
-    /* Garante que o iframe gerado ocupe o espaço */
     #ccp-container iframe {
       width: 100% !important;
       height: 100% !important;
@@ -112,41 +147,66 @@
 <body>
 
   <div id="dashboard">
-    <div class="header">
-      <h1>Service Desk TI — Central de Operações</h1>
-      <p>Equipe 02 • Trilha de Extensão Amazon Connect & Lex V2</p>
-    </div>
+    <div>
+      <div class="header">
+        <h1>Service Desk TI — Operações</h1>
+        <p>Equipe 02 • Amazon Connect, Profiles & Cases</p>
+      </div>
 
-    <div class="card">
-      <h3>Estado do Atendimento</h3>
-      <span id="agent-status" class="status-badge">Inicializando CCP...</span>
-      <div id="contact-details">
-        Aguardando nova interação... Fique disponível no painel ao lado para receber chamadas de voz ou mensagens do chat.
+      <div class="card">
+        <h3>Estado do Agente</h3>
+        <div class="status-row">
+          <span id="agent-status" class="status-badge">Inicializando Workspace...</span>
+          <button class="btn-login" onclick="abrirLogin()">Login AWS</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>👤 Customer Profile (Colaborador)</h3>
+        <div id="profile-details" class="empty-msg">
+          Aguardando identificação do colaborador...
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>📋 Connect Case & Triagem</h3>
+        <div id="case-details" class="empty-msg">
+          Nenhum caso ativo no momento.
+        </div>
       </div>
     </div>
 
     <div class="footer">
-      Escola da Nuvem &copy; 2026 — Instância: edn-grupo02-servicedesk
+      Escola da Nuvem © 2026 — edn-grupo02-servicedesk
     </div>
   </div>
 
-  <!-- O CCP do Amazon Connect é renderizado dentro desta div -->
+  <!-- Agent Workspace (CCP + Customer Profiles + Connect Cases) -->
   <div id="ccp-container"></div>
 
   <script>
     const containerDiv = document.getElementById("ccp-container");
     const instanceUrl = "https://edn-grupo02-servicedesk.my.connect.aws";
-    const ccpUrl = `${instanceUrl}/ccp-v2/`;
+    // Agent Workspace carrega CCP + Customer Profiles + Connect Cases integrados
+    const workspaceUrl = `${instanceUrl}/agent-app-v2/`;
+
+    function abrirLogin() {
+      window.open(`${instanceUrl}/login`, "ConnectLogin", "width=500,height=650");
+    }
 
     window.addEventListener("load", function () {
       connect.core.initCCP(containerDiv, {
-        ccpUrl: ccpUrl,
+        ccpUrl: workspaceUrl,
         loginUrl: `${instanceUrl}/login`,
         loginPopup: true,
         loginPopupAutoClose: true,
         showExternalProviderLogin: false,
         softphone: {
           allowFramedSoftphone: true
+        },
+        pageOptions: {
+          enableAudioDeviceSettings: true,
+          enablePhoneTypeSettings: true
         }
       });
 
@@ -155,8 +215,7 @@
         const badge = document.getElementById("agent-status");
 
         function updateStatus(stateName) {
-          badge.textContent = "Status: " + stateName;
-          
+          badge.textContent = stateName || "Conectado";
           const stateLower = (stateName || "").toLowerCase();
           if (stateLower.includes("offline")) {
             badge.className = "status-badge offline";
@@ -167,53 +226,85 @@
           }
         }
 
-        // Estado inicial do agente
         const currentState = agent.getState();
         if (currentState && currentState.name) {
           updateStatus(currentState.name);
         }
 
-        // Atualização em tempo real quando mudar o dropdown do CCP
         agent.onStateChange(function(agentStateChange) {
           updateStatus(agentStateChange.newState);
         });
       });
 
-      // Monitoramento dos contatos recebidos (Voz / Chat)
+      // Monitoramento dos contatos recebidos (Atributos de Profile e Case)
       connect.contact(function(contact) {
-        const details = document.getElementById("contact-details");
         const badge = document.getElementById("agent-status");
+        const profileDiv = document.getElementById("profile-details");
+        const caseDiv = document.getElementById("case-details");
+
+        function renderContactData() {
+          const attrs = contact.getAttributes() || {};
+          const getAttr = (keys) => {
+            for (const k of keys) {
+              if (attrs[k] && attrs[k].value) return attrs[k].value;
+            }
+            return "Não informado";
+          };
+
+          const nome = getAttr(["CustomerName", "nomeColaborador", "Name"]);
+          const cpf = getAttr(["CpfColaborador", "CPF", "cpf"]);
+          const profileId = getAttr(["ProfileId", "CustomerProfileId", "profileId"]);
+          const caseId = getAttr(["CaseId", "caseId", "CaseNumber"]);
+          const assunto = getAttr(["MotivoChamado", "Intent", "Categoria", "Assunto"]);
+          const fila = contact.getQueue() ? contact.getQueue().name : "Service Desk N1";
+
+          profileDiv.innerHTML = `
+            <div class="info-grid">
+              <div class="info-item"><span>Nome do Colaborador</span><strong>${nome}</strong></div>
+              <div class="info-item"><span>CPF (4 dígitos)</span><strong>${cpf}</strong></div>
+              <div class="info-item"><span>Customer Profile ID</span><strong>${profileId}</strong></div>
+            </div>
+          `;
+
+          // Lista quaisquer outros atributos personalizados enviados pelo fluxo
+          let extrasHtml = "";
+          const ignorar = ["CustomerName", "nomeColaborador", "Name", "CpfColaborador", "CPF", "cpf", "ProfileId", "CustomerProfileId", "profileId", "CaseId", "caseId", "CaseNumber"];
+          for (const key in attrs) {
+            if (!ignorar.includes(key) && attrs[key] && attrs[key].value) {
+              extrasHtml += `<div class="info-item"><span>${key}</span><strong>${attrs[key].value}</strong></div>`;
+            }
+          }
+
+          caseDiv.innerHTML = `
+            <div class="info-grid">
+              <div class="info-item"><span>Protocolo / Case ID</span><strong>${caseId}</strong></div>
+              <div class="info-item"><span>Fila de Atendimento</span><strong>${fila}</strong></div>
+              <div class="info-item"><span>Solicitação / Intenção</span><strong>${assunto}</strong></div>
+              ${extrasHtml}
+            </div>
+          `;
+        }
 
         contact.onConnecting(function() {
           badge.textContent = "Recebendo Contato...";
           badge.className = "status-badge connected";
-          details.innerHTML = "<strong>Novo contato entrando...</strong> Canal: " + contact.getType();
+          renderContactData();
         });
 
         contact.onConnected(function() {
           badge.textContent = "Em Atendimento";
           badge.className = "status-badge connected";
-          
-          let attributes = contact.getAttributes();
-          let attrHtml = "<p><strong>Contato Conectado!</strong></p>";
-          if (attributes && Object.keys(attributes).length > 0) {
-            attrHtml += "<ul>";
-            for (let key in attributes) {
-              attrHtml += `<li><strong>${key}:</strong> ${attributes[key].value}</li>`;
-            }
-            attrHtml += "</ul>";
-          }
-          details.innerHTML = attrHtml;
+          renderContactData();
         });
 
         contact.onEnded(function() {
           badge.textContent = "Disponível";
           badge.className = "status-badge online";
-          details.innerHTML = "Atendimento finalizado. Aguardando novo contato...";
+          profileDiv.innerHTML = '<span class="empty-msg">Atendimento encerrado. Aguardando próximo colaborador...</span>';
+          caseDiv.innerHTML = '<span class="empty-msg">Nenhum caso ativo no momento.</span>';
         });
       });
     });
   </script>
 </body>
 </html>
-
