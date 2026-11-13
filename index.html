@@ -195,7 +195,8 @@
     amazon_connect('snippetId', 'QVFJREFIaFlwRXZ2YWpja2ltNitTc3ROR25DOU9UTlZvemEzcUJScWtob2VUczNqK2dGOXNzRUtKelpkOThWTDgvNGdUK01WQUFBQWJqQnNCZ2txaGtpRzl3MEJCd2FnWHpCZEFnRUFNRmdHQ1NxR1NJYjNEUUVIQVRBZUJnbGdoa2dCWlFNRUFTNHdFUVFNSmVkbVgzVkI0VFh2QVU5ekFnRVFnQ3RZMjJndDQwQlREWnI1ZDRaN2ZuV2tGU3RETGgvaWd0MkJkVG5xdnY0MG5xN0Q5SmhGYVZSTkFoOUw6OndxMHRjWUlMOGpzOU9KMEF3eCswUmV0REhxWGFlcW5IWlc3b0lpMnlSN3kyT2dDYXZVZ1A0dU13MzRGaysrM3Z3VEFlOFk1RW9veTZneFdrMnNlaVNES3BZcFMzQjFnQnVVRFBxTEhQTlZJMTJPOFAxUWhNTzZyU0tvdkdINmdmanJaRzJoZWJsdzVRckwrUXhwTnR3Umk0TzBDZnk4UT0=');
     amazon_connect('supportedMessagingContentTypes', [ 'text/plain', 'text/markdown', 'application/vnd.amazonaws.connect.message.interactive', 'application/vnd.amazonaws.connect.message.interactive.response' ]);
   </script> -->
-  <script type="text/javascript">
+  
+  <!-- <script type="text/javascript">
     (function(w, d, x, id){
       s=d.createElement('script');
       s.src='https://edn-grupo02-servicedesk.my.connect.aws/connectwidget/static/amazon-connect-chat-interface-client.js';
@@ -222,6 +223,20 @@
   
     // Define o nome inicial enviado à sessão do Connect
     amazon_connect('customerName', 'Carlos Eduardo');
+  </script> -->
+  <script type="text/javascript">
+    (function(w, d, x, id){
+      s=d.createElement('script');
+      s.src='https://edn-grupo02-servicedesk.my.connect.aws/connectwidget/static/amazon-connect-chat-interface-client.js';
+      s.async=1;
+      s.id=id;
+      d.getElementsByTagName('head')[0].appendChild(s);
+      w[x] = w[x] || function() { (w[x].ac = w[x].ac || []).push(arguments) };
+    })(window, document, 'amazon_connect', '32f29334-3781-4ea6-a203-f2663d24f30a');
+    amazon_connect('styles', { iconType: 'CHAT_VOICE', openChat: { color: '#ffffff', backgroundColor: '#FF9900' }, closeChat: { color: '#ffffff', backgroundColor: '#232F3E'}, headerConfig: { headerMessage: 'Service Desk TI - EdN', headerColorHex: '#232F3E'}, logoConfig: { sourceUrl: ''} });
+    amazon_connect('snippetId', 'QVFJREFIaFlwRXZ2YWpja2ltNitTc3ROR25DOU9UTlZvemEzcUJScWtob2VUczNqK2dGOXNzRUtKelpkOThWTDgvNGdUK01WQUFBQWJqQnNCZ2txaGtpRzl3MEJCd2FnWHpCZEFnRUFNRmdHQ1NxR1NJYjNEUUVIQVRBZUJnbGdoa2dCWlFNRUFTNHdFUVFNSmVkbVgzVkI0VFh2QVU5ekFnRVFnQ3RZMjJndDQwQlREWnI1ZDRaN2ZuV2tGU3RETGgvaWd0MkJkVG5xdnY0MG5xN0Q5SmhGYVZSTkFoOUw6OndxMHRjWUlMOGpzOU9KMEF3eCswUmV0REhxWGFlcW5IWlc3b0lpMnlSN3kyT2dDYXZVZ1A0dU13MzRGaysrM3Z3VEFlOFk1RW9veTZneFdrMnNlaVNES3BZcFMzQjFnQnVVRFBxTEhQTlZJMTJPOFAxUWhNTzZyU0tvdkdINmdmanJaRzJoZWJsdzVRckwrUXhwTnR3Umk0TzBDZnk4UT0=');
+    amazon_connect('supportedMessagingContentTypes', [ 'text/plain', 'text/markdown', 'application/vnd.amazonaws.connect.message.interactive', 'application/vnd.amazonaws.connect.message.interactive.response' ]);
+    amazon_connect('viewConfig', '{"arn":"arn:aws:connect:us-west-2:311883575039:instance/757e9217-1d01-4507-afd5-8e8cb9a7e3a0/view/61c28d4b-d51a-4fba-9c9e-a94f57f0ffc3:$LATEST","id":"61c28d4b-d51a-4fba-9c9e-a94f57f0ffc3","content":{"actions":["ActionSelected"],"inputSchema":{"type":"object","properties":{},"required":[],"$defs":{"ViewCondition":{"$id":"/view/condition","type":"object","patternProperties":{"^(MoreThan|LessThan|NotEquals|Equals|Includes)$":{"type":"object","properties":{"ElementByKey":{"type":"string"},"ElementByValue":{"anyOf":[{"type":"number"},{"type":"string"},{"type":"boolean"},{"type":"array"},{"type":"object"}]}},"additionalProperties":false},"^(AndConditions|OrConditions)$":{"type":"array","items":{"$ref":"/view/condition"}}},"additionalProperties":false}}},"template":{"Head":{"Configuration":{},"Integrations":[],"Title":"Formulario_PreChat_ServiceDesk_TI"},"Body":[{"_id":"Form_1","Type":"Form","Props":{},"Content":[{"_id":"Section_1","Type":"Section","Props":{"Heading":"Service Desk de TI - EdN"},"Content":[{"_id":"FormInput_1","Type":"FormInput","Props":{"Label":"Seu nome","Name":"nomeColaborador","DefaultValue":"","InputType":"text","Required":true,"HelperText":""},"Content":[]},{"_id":"FormInput_1794508078703","Type":"FormInput","Props":{"Label":"4 primeiros dígitos do seu CPF","Name":"CpfColaborador","DefaultValue":"","InputType":"text","Required":true,"HelperText":"Digite apenas os 4 primeiros números","ValidationPattern":"^\\d{4}$","Disabled":false},"Content":[]},{"_id":"ConnectAction_1794534426506","Type":"ConnectAction","Props":{"ConnectActionType":"StartChatContact","Label":"Iniciar","StartTaskContactProps":{"ContactFlowId":"arn:aws:connect:us-west-2:311883575039:instance/757e9217-1d01-4507-afd5-8e8cb9a7e3a0/contact-flow/e6d46a31-577a-4af1-99e1-2668e1ebe6ef","TaskFields":{"Name":{"_linkedFormOutputName":"nomeColaborador"},"References":{},"Description":{"_linkedFormOutputName":"CpfColaborador"}},"Attributes":[{"Key":"","Value":""}]},"StartEmailContactProps":{"DestinationEmailAddress":"","ContactFlowId":"","EmailFields":{"CustomerDisplayName":"","CustomerEmailAddress":"","Subject":"","Body":""},"Attributes":[{"Key":"","Value":""}]},"StartChatContactProps":{"ContactFlowId":"arn:aws:connect:us-west-2:311883575039:instance/757e9217-1d01-4507-afd5-8e8cb9a7e3a0/contact-flow/e6d46a31-577a-4af1-99e1-2668e1ebe6ef","ChatFields":{"CustomerDisplayName":{"_linkedFormOutputName":"nomeColaborador"},"InitialMessage":""},"Attributes":[{"Key":"CpfColaborador","Value":{"_linkedFormOutputName":"CpfColaborador"}},{"Key":"nomeColaborador","Value":{"_linkedFormOutputName":"nomeColaborador"}}]}},"Content":["Connect Action Button"]}],"Configuration":{"Layout":{"Columns":"12"}}}]}]}},"name":"Formulario_PreChat_ServiceDesk_TI","status":"PUBLISHED","type":"CUSTOMER_MANAGED","viewContentSha256":"30dbf58aadd5087ede0b55bebc2fff7975429b937831653bf08a7f740febe9a3"}');
   </script>
 
 </body>
